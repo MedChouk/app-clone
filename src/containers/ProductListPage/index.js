@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react'
@@ -32,21 +31,22 @@ export const ProductListPage = (props) => {
     const { match } = props;
     dispatch(getProductsBySlug(match.params.slug))
   }, []);
+
   return (
     <Layout>
       {
-        Object.keys(product.productsByPrice).map((key) => {
+        Object.keys(product.productsByPrice).map((item, index) => {
 
           return (
-            <div className='card'>
+            <div className='card' key={index}>
               <div className='cardHeader'>
-                <div>{props.match.params.slug} mobile under {priceRange[key]}</div>
+                <div>{props.match.params.slug} mobile under {priceRange[item]}</div>
                 <button>view all</button>
               </div>
               <div style={{ display: 'flex' }}>
                 {
-                  product.productsByPrice[key].map((product) =>
-                    <div className='productContainer'>
+                  product.productsByPrice[item].map((product) =>
+                    <div className='productContainer' key={product._id}>
                       <div className='productImgContainer'>
                         <img src={generatePublicUrl(product.productPictures[0].img)} />
                       </div>
