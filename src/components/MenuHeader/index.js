@@ -25,7 +25,7 @@ export const MenuHeader = (props) => {
         <li key={category.name}>
           {
             category.parentId ? <a
-              href={`/${category.slug}?cid=${category._id}&type=${category.type}`}>
+              href={`/${category.slug}`}>
               {category.name}
             </a> :
             <span>{category.name}</span>

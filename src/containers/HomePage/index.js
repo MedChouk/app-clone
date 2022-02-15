@@ -1,6 +1,5 @@
 import React from 'react';
-import { Header } from './../../components/Header/index';
-import { MenuHeader } from './../../components/MenuHeader/index';
+import Layout from '../../components/Layout';
 
 /**
 * @author
@@ -9,10 +8,9 @@ import { MenuHeader } from './../../components/MenuHeader/index';
 
 const HomePage = (props) => {
   return(
-    <div>
-      <Header />
-      <MenuHeader />
-    </div>
+    <Layout>
+      <h1>Home Page !!!! </h1>     
+    </Layout>
    )
 
  }
