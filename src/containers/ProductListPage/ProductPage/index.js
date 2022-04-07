@@ -1,0 +1,72 @@
+import React, { useEffect } from 'react';
+import { getProductPage } from '../../../actions';
+import getParams from '../../../utils/getParams';
+import { useDispatch, useSelector } from 'react-redux';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from 'react-responsive-carousel';
+import { Card } from './../../../components/UI/Card/index';
+
+/**
+* @author
+* @function ProductPage
+**/
+
+export const ProductPage = (props) => {
+
+    const dispatch = useDispatch();
+    const product = useSelector(state => state.product);
+    const { page } = product;
+
+    useEffect(() => {
+        const params = getParams(props.location.search);
+        console.log({ params });
+        const payload = {
+            params
+        }
+        dispatch(getProductPage(payload));
+    }, []);
+    return (
+        <div style={{ margin: '0 5px' }}>
+            <h3>{page.title}</h3>
+            <Carousel>
+                {
+                    page.banners && page.banners.map((banner, index) =>
+                        <div key={index}>
+                            <img src={banner.img} alt="" />
+                            <p className="legend">Legend 1</p>
+                        </div>
+                    )
+                }
+            </Carousel>
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                margin: '10px 0'
+            }}>
+                {
+                    page.products && page.products.map((product, index) =>
+                        <Card
+                            key={index}
+                            style={{
+                                width: '400px',
+                                height: '200px',
+                                margin: '5px'
+                            }}
+                        >
+                            <img style={{
+                                width: '100%',
+                                height: '100%'
+                            }}
+
+                                src={product.img} alt="" />
+
+                        </Card>
+                    )
+                }
+            </div>
+        </div>
+
+    )
+
+}
