@@ -11,7 +11,13 @@ const initState = {
     under20k: [],
     under30k: [],
   },
-  productsByPrice: {},
+  productsByPrice: {
+    under5k: [],
+    under10k: [],
+    under15k: [],
+    under20k: [],
+    under30k: [],
+  },
   pageRequest: false,
   page: {},
   error: null,
@@ -48,6 +54,26 @@ export default (state = initState, action) => {
       state = {
         ...state,
         pageRequest: false,
+        error: action.payload.error,
+      };
+      break;
+    case productConstants.GET_PRODUCT_DETAILS_BY_ID_REQUEST:
+      state = {
+        ...state,
+        loading: true,
+      };
+      break;
+    case productConstants.GET_PRODUCT_DETAILS_BY_ID_SUCCESS:
+      state = {
+        ...state,
+        loading: false,
+        productDetails: action.payload.productDetails,
+      };
+      break;
+    case productConstants.GET_PRODUCT_DETAILS_BY_ID_FAILURE:
+      state = {
+        ...state,
+        loading: false,
         error: action.payload.error,
       };
       break;

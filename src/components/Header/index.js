@@ -1,41 +1,91 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
-import './style.css';
-import { IoIosArrowDown, IoIosCart, IoIosSearch } from 'react-icons/io';
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import "./style.css";
+import { IoIosArrowDown, IoIosCart, IoIosSearch } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../actions";
 import {
   Modal,
   MaterialInput,
   MaterialButton,
-  DropdownMenu
-} from '../MaterialUI';
+  DropdownMenu,
+} from "../MaterialUI";
 
 /**
-* @author
-* @function Header
-**/
+ * @author
+ * @function Header
+ **/
 
 export const Header = (props) => {
-
   const [loginModal, setLoginModal] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const userLogin = () => {
-
-      dispatch(login({ email, password }));
-    
+    dispatch(login({ email, password }));
   };
 
+  useEffect(() => {
+    if (auth.authenticate) {
+      setLoginModal(false);
+    }
+  }, [auth.authenticate]);
+
+  const renderLoggedInMenu = () => {
+    return (
+      <DropdownMenu
+        menu={<a className="fullName">{auth.user.fullName}</a>}
+        menus={[
+          { label: "My Profile", href: "", icon: null },
+          { label: "SuperCoin Zone", href: "", icon: null },
+          { label: "Flipkart Plus Zone", href: "", icon: null },
+          {
+            label: "Orders",
+            href: "",
+            icon: null,
+          },
+          { label: "Wishlist", href: "", icon: null },
+          { label: "My Chats", href: "", icon: null },
+          { label: "Coupons", href: "", icon: null },
+          { label: "Rewards", href: "", icon: null },
+          { label: "Notifications", href: "", icon: null },
+          { label: "Gift Cards", href: "", icon: null },
+        ]}
+      />
+    );
+  };
+
+  const renderNonLoggedInMenu = () => {
+    return (
+      <DropdownMenu
+        menu={
+          <a className="loginButton" onClick={() => setLoginModal(true)}>
+            Login
+          </a>
+        }
+        menus={[
+          { label: "My Profile", href: "", icon: null },
+          { label: "Flipkart Plus Zone", href: "", icon: null },
+          { label: "Orders", href: "", icon: null },
+          { label: "Wishlist", href: "", icon: null },
+          { label: "Rewards", href: "", icon: null },
+          { label: "Gift Cards", href: "", icon: null },
+        ]}
+        firstMenu={
+          <div className="firstmenu">
+            <span>New Customer?</span>
+            <a style={{ color: "#2874f0" }}>Sign Up</a>
+          </div>
+        }
+      />
+    );
+  };
 
   return (
     <div className="header">
-      <Modal
-        visible={loginModal}
-        onClose={() => setLoginModal(false)}
-      >
+      <Modal visible={loginModal} onClose={() => setLoginModal(false)}>
         <div className="authContainer">
           <div className="row">
             <div className="leftspace">
@@ -43,8 +93,6 @@ export const Header = (props) => {
               <p>Get access to your Orders, Wishlist and Recommendations</p>
             </div>
             <div className="rightspace">
-
-
               <MaterialInput
                 type="text"
                 label="Enter Email/Enter Mobile Number"
@@ -57,14 +105,14 @@ export const Header = (props) => {
                 label="Enter Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-              //rightElement={<a href="#">Forgot?</a>}
+                //rightElement={<a href="#">Forgot?</a>}
               />
               <MaterialButton
                 title="Login"
                 bgColor="#fb641b"
                 textColor="#ffffff"
                 style={{
-                  margin: '40px 0 20px 0'
+                  margin: "40px 0 20px 0",
                 }}
                 onClick={userLogin}
               />
@@ -74,12 +122,9 @@ export const Header = (props) => {
                 bgColor="#ffffff"
                 textColor="#2874f0"
                 style={{
-                  margin: "20px 0"
+                  margin: "20px 0",
                 }}
               />
-
-
-
             </div>
           </div>
         </div>
@@ -88,44 +133,27 @@ export const Header = (props) => {
         <div className="logo">
           <h1>ProMax</h1>
         </div>
-        <div style={{
-          padding: '0 10px'
-        }}>
+        <div
+          style={{
+            padding: "0 10px",
+          }}
+        >
           <div className="searchInputContainer">
             <input
               className="searchInput"
-              placeholder={'search for products, brands and more'}
+              placeholder={"search for products, brands and more"}
             />
             <div className="searchIconContainer">
-              <IoIosSearch style={{
-                color: '#2874f0'
-              }} />
+              <IoIosSearch
+                style={{
+                  color: "#2874f0",
+                }}
+              />
             </div>
-
           </div>
         </div>
         <div className="rightMenu">
-          <DropdownMenu
-            menu={
-              <a className="loginButton" onClick={() => setLoginModal(true)}>
-                Login
-              </a>
-            }
-            menus={[
-              { label: 'My Profile', href: '', icon: null },
-              { label: 'Flipkart Plus Zone', href: '', icon: null },
-              { label: 'Orders', href: '', icon: null },
-              { label: 'Wishlist', href: '', icon: null },
-              { label: 'Rewards', href: '', icon: null },
-              { label: 'Gift Cards', href: '', icon: null },
-            ]}
-            firstMenu={
-              <div className="firstmenu">
-                <span>New Customer?</span>
-                <a style={{ color: '#2874f0' }}>Sign Up</a>
-              </div>
-            }
-          />
+          {auth.authenticate ? renderLoggedInMenu() : renderNonLoggedInMenu()}
           <DropdownMenu
             menu={
               <a className="more">
@@ -134,23 +162,21 @@ export const Header = (props) => {
               </a>
             }
             menus={[
-              { label: 'Notification Preference', href: '', icon: null },
-              { label: 'Sell on flipkart', href: '', icon: null },
-              { label: '24x7 Customer Care', href: '', icon: null },
-              { label: 'Advertise', href: '', icon: null },
-              { label: 'Download App', href: '', icon: null }
+              { label: "Notification Preference", href: "", icon: null },
+              { label: "Sell on flipkart", href: "", icon: null },
+              { label: "24x7 Customer Care", href: "", icon: null },
+              { label: "Advertise", href: "", icon: null },
+              { label: "Download App", href: "", icon: null },
             ]}
           />
           <div>
             <a className="cart">
               <IoIosCart />
-              <span style={{ margin: '0 10px' }}>Cart</span>
+              <span style={{ margin: "0 10px" }}>Cart</span>
             </a>
           </div>
         </div>
-
       </div>
     </div>
-  )
-
-}
+  );
+};
