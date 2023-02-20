@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Layout from '../../components/Layout';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductDetailsById } from "../../actions";
+import { getProductDetailsById, addToCart } from "../../actions";
 import { 
   IoIosArrowForward, 
   IoIosStar, 
@@ -68,6 +68,12 @@ export const ProductDetailsPage = (props) => {
                   width: '485px'
                 }}
                 icon={<IoMdCart />}
+                onClick={() => {
+                  const { _id, name, price } = product.productDetails;
+                  const img = product.productDetails.productPictures[0].img;
+                  dispatch(addToCart({ _id, name, price, img }));
+                  props.history.push(`/cart`);
+                }}
               />
               <MaterialButton
                 title="BUY NOW"
